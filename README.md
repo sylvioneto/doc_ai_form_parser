@@ -12,4 +12,4 @@ gcloud functions deploy doc_ai_test \
 --entry-point main \
 --trigger-resource syl-data-tests-doc-ai \
 --trigger-event google.storage.object.finalize \
---set-env-vars PROCESSOR_ID=7776fd072ecba23f,PROJECT_ID=syl-data-tests
+--set-env-vars PROCESSOR_ID=3a618af30c50f05a,PROJECT_ID=syl-data-tests

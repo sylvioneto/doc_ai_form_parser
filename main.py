@@ -1,5 +1,5 @@
+from google.cloud import documentai_v1beta3 as documentai
 from google.cloud import storage
-from google.cloud import documentai_v1 as documentai
 import json, os
 
 
@@ -48,46 +48,43 @@ def updaload_file_to_gcs(bucket_name, file_name):
 
 
 def process_document(file_name=None):
-    location=os.getenv('PROCESSOR_LOCATION', 'us')
 
-    # You must set the api_endpoint if you use a location other than 'us', e.g.:
-    opts = {}
-    if location == "eu":
-        opts = {"api_endpoint": "eu-documentai.googleapis.com"}
-
-    client = documentai.DocumentProcessorServiceClient(client_options=opts)
+    # Instantiates a client
+    client = documentai.DocumentProcessorServiceClient()
 
     # The full resource name of the processor, e.g.:
     # projects/project-id/locations/location/processor/processor-id
     # You must create new processors in the Cloud Console first
-    name = f"projects/{os.getenv('PROJECT_ID')}/locations/{location}/processors/{os.getenv('PROCESSOR_ID')}"
+    name = f"projects/{os.getenv('PROJECT_ID')}/locations/us/processors/{os.getenv('PROCESSOR_ID')}"
 
-    # Read the file into memory
     with open(file_name, "rb") as image:
         image_content = image.read()
 
+    # Read the file into memory
     document = {"content": image_content, "mime_type": "application/pdf"}
 
     # Configure the process request
-    request = {"name": name, "raw_document": document}
+    request = {"name": name, "document": document}
 
+    # Use the Document AI client to process the sample form
     result = client.process_document(request=request)
+
     document = result.document
-    document_pages = document.pages
+    document_text = document.text
+    print("Document processing complete.")
+    print("Text: {}".format(document_text))
 
-    # For a full list of Document object attributes, please reference this page: https://googleapis.dev/python/documentai/latest/_modules/google/cloud/documentai_v1beta3/types/document.html#Document
-
-    # Read the text recognition output from the processor
     data = {}
-    data['paragraphs'] = []
-    print("The document contains the following paragraphs:")
+    document_pages = document.pages
     for page in document_pages:
-        paragraphs = page.paragraphs
-        for paragraph in paragraphs:
-            print(paragraph)
-            paragraph_text = get_text(paragraph.layout, document)
-            print(f"Paragraph text: {paragraph_text}")
-            data['paragraphs'].append(paragraph_text)
+        print("Page Number:{}".format(page.page_number))
+        for form_field in page.form_fields:
+            fieldName=get_text(form_field.field_name,document)
+            nameConfidence = round(form_field.field_name.confidence,4)
+            fieldValue = get_text(form_field.field_value,document)
+            valueConfidence = round(form_field.field_value.confidence,4)
+            print(fieldName+fieldValue +"  (Confidence Scores: "+str(nameConfidence)+", "+str(valueConfidence)+")")
+            data[fieldName] = fieldValue
 
     result_file_name = file_name.replace("pdf","json")
     with open(result_file_name, 'w') as outfile:
