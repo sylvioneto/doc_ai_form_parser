@@ -5,7 +5,6 @@ tmp_dir = '/tmp'
 def download_file_from_gcs(bucket_name, object_name):
     """Lists all the blobs in the bucket."""
     file_name='/{}}/{}'.format(tmp_dir, object_name)
-    # storage_client = storage.Client(project=os.getenv('PROJECT_ID'))
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(object_name)
