@@ -1,6 +1,13 @@
+# GCP Document AI 
 
+## Description
+This is a demonstration of how to use Document AI to parse forms.  
+Scenario: Users upload forms filled handly on the company's website, then it ingests the form in a GCS bucket. This event triggers a function that calls Document AI, parse the document from pdf to json, and store the result in a bucket.
 
-How to run:
+## Architecture
+![diagram](diagram.png)
+
+## How to run
 
 1. Create two [GCS buckets](https://console.cloud.google.com/storage/browser), for example:
 - `<YOUR-PROJECT-ID>`-doc-ai-input: it receives forms and triggers a Cloud Function.
