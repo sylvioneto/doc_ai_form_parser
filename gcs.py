@@ -1,6 +1,6 @@
 from google.cloud import storage
 
-tmp_dir = '/tmp'
+tmp_dir = "/tmp/"
 
 def download_file_from_gcs(bucket_name, object_name):
     """Lists all the blobs in the bucket."""
