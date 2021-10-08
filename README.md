@@ -2,7 +2,7 @@
 
 ## Description
 This is a demonstration of how to use Document AI to parse forms.  
-Scenario: Users upload forms filled handly on the company's website, then it ingests the form in a GCS bucket. This event triggers a function that calls Document AI, parse the document from pdf to json, and store the result in a bucket.
+Scenario:  Users upload forms on the company's website, which ingest it into a GCS bucket. Then, this event triggers a Cloud Function that calls Document AI, parses the document, and stores the result into a bucket.
 
 ## Architecture
 ![diagram](diagram.png)
