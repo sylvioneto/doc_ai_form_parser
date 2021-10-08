@@ -2,7 +2,7 @@
 
 How to run:
 
-1. Create two [GCS buckets](https://https://console.cloud.google.com/storage/browser), for example:
+1. Create two [GCS buckets](https://console.cloud.google.com/storage/browser), for example:
 - `<YOUR-PROJECT-ID>`-doc-ai-input: it receives forms and triggers a Cloud Function.
 - `<YOUR-PROJECT-ID>`-doc-ai-output: it receives json with parsed form's data.
 
